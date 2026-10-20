@@ -1,0 +1,12 @@
+{
+  "nomApp": "Components Flutter M3",
+  "rutes": [
+    { "ruta": "alert", "icona": "add_alert", "texte": "Alertes i Diàlegs" },
+    { "ruta": "avatar", "icona": "account_circle", "texte": "Avatars" },
+    { "ruta": "card", "icona": "folder_open", "texte": "Targetes (Cards)" },
+    { "ruta": "animatedContainer", "icona": "donut_large", "texte": "Contenidor Animat" },
+    { "ruta": "inputs", "icona": "input", "texte": "Inputs i Formularis" },
+    { "ruta": "slider", "icona": "tune", "texte": "Sliders i Checks" },
+    { "ruta": "list", "icona": "list", "texte": "Llistes i Scroll Infinit" }
+  ]
+}
