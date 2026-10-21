@@ -46,7 +46,7 @@ class HomePage extends StatelessWidget {
         onTap: (){
           // final route = MaterialPageRoute(builder: (context) =>  AlertScreen());
           // Navigator.push(context, route);
-          Navigator.push(context, element["ruta"]);
+          Navigator.pushNamed(context, element["ruta"]);
         },
       );
     elements..add(widgetTemp)..add(Divider());
