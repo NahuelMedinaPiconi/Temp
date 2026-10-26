@@ -1,117 +1,172 @@
 import 'package:flutter/material.dart';
 
-class InputsScreen extends StatefulWidget {
-  const InputsScreen({super.key});
+class InputScreen extends StatefulWidget {
 
   @override
-  State<InputsScreen> createState() => _InputsScreenState();
+  State<InputScreen> createState() => _InputScreenState();
 }
 
-class _InputsScreenState extends State<InputsScreen> {
-  String _nom = '';
-  String _email = '';
-  String _data = '';
-  String _paisSeleccionat = 'Andorra';
+class _InputScreenState extends State<InputScreen> {
 
-  final List<String> _paisos = ['Andorra', 'Espanya', 'França', 'Itàlia'];
-  final TextEditingController _inputDateController = TextEditingController();
+  String _nom = "";
+  String _email = "";
+  String _data = "";
+  String _pais = "Andorra";
+  TextEditingController _inputController = TextEditingController();
+  List<String> _paisos = ['Andorra','Anglaterra','Dinamarca','Espanya','França'];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Inputs i Formularis')),
+      appBar: AppBar(
+        title: Text("Inputs"),
+      ),
       body: ListView(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.symmetric(horizontal: 10, vertical: 20),
         children: [
-          _crearInputNom(),
-          const Divider(),
-          _crearInputEmail(),
-          const Divider(),
-          _crearInputData(context),
-          const Divider(),
-          _crearDropdown(),
-          const Divider(),
-          ListTile(
-            title: Text('Nom: $_nom'),
-            subtitle: Text('Email: $_email \vert{} Data:$_data'),
-            trailing: Text(_paisSeleccionat),
-          ),
+          _crearInput(),
+          Divider(),
+          _crearEmail(),
+          Divider(),
+          _crearContra(),
+          Divider(),
+          _crearData(context),
+          Divider(),
+          _crearDropDown(),
+          Divider(),
+          _crearPersona(),
         ],
       ),
     );
   }
 
-  Widget _crearInputNom() {
+  TextField _crearInput() {
     return TextField(
+      // autofocus: true,
       textCapitalization: TextCapitalization.sentences,
+      onChanged: (valor) {
+        setState(() {
+          _nom = valor;
+        });
+        // print(_nom);
+      },
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        labelText: 'Nom complet',
-        hintText: 'Ex. Anna Garcia',
-        suffixIcon: const Icon(Icons.accessibility),
+        counter: Text("${_nom.length}"),
+        hintText: "Escribe Nahuel!",
+        labelText: "Nom",
+        helperText: "Nom nahuel",
+        suffixIcon: Icon(Icons.accessibility),
+        icon: Icon(Icons.account_circle),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30)
+        )
       ),
-      onChanged: (val) => setState(() => _nom = val),
     );
   }
 
-  Widget _crearInputEmail() {
+  TextField _crearEmail() {
     return TextField(
       keyboardType: TextInputType.emailAddress,
+      onChanged: (value) => setState(() => _email = value),
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        labelText: 'Correu Electrònic',
-        suffixIcon: const Icon(Icons.alternate_email),
+        hintText: "Correu electronic: ",
+        labelText: "Correu",
+        suffixIcon: Icon(Icons.alternate_email),
+        icon: Icon(Icons.email),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30)
+        )
       ),
-      onChanged: (val) => setState(() => _email = val),
     );
   }
 
-  Widget _crearInputData(BuildContext context) {
+  TextField _crearContra() {
     return TextField(
-      controller: _inputDateController,
-      enableInteractiveSelection: false,
+      obscureText: true,
+      // onChanged: (value) => setState(() => _email = value),
       decoration: InputDecoration(
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
-        labelText: 'Data de Naixement',
-        suffixIcon: const Icon(Icons.calendar_today),
+        hintText: "Contrasenya",
+        labelText: "Contrasenya",
+        suffixIcon: Icon(Icons.lock_open),
+        icon: Icon(Icons.lock),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30)
+        )
       ),
+    );
+  }
+
+  TextField _crearData(BuildContext context) {
+    return TextField(
+      enableInteractiveSelection: false,
+      controller: _inputController,
       onTap: () {
-        FocusScope.of(context).requestFocus(FocusNode());
+        FocusScope.of(context).requestFocus(new FocusNode());
         _seleccionaData(context);
       },
+      decoration: InputDecoration(
+        hintText: "Data naixement",
+        labelText: "Data naixement",
+        suffixIcon: Icon(Icons.perm_contact_calendar),
+        icon: Icon(Icons.calendar_today),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(30)
+        )
+      ),
     );
   }
 
-  void _seleccionaData(BuildContext context) async {
+  void _seleccionaData(BuildContext context) async{
     DateTime? picked = await showDatePicker(
       context: context,
+      // locale: Locale("es", "ES"),
       initialDate: DateTime.now(),
-      firstDate: DateTime(1950),
+      firstDate: DateTime(2020),
       lastDate: DateTime(2030),
     );
     if (picked != null) {
       setState(() {
-        _data = picked.toString().split(' ')[0];
-        _inputDateController.text = _data;
+        _data = picked.toString();
+        _inputController.text = _data;
       });
     }
   }
 
-  Widget _crearDropdown() {
+  Widget _crearDropDown() {
     return Row(
       children: [
-        const Icon(Icons.language_rounded),
-        const SizedBox(width: 15),
+        Icon(Icons.language),
+        SizedBox(width: 30),
         Expanded(
-          child: DropdownButton<String>(
-            value: _paisSeleccionat,
-            items: _paisos.map((pais) {
-              return DropdownMenuItem(value: pais, child: Text(pais));
-            }).toList(),
-            onChanged: (opt) => setState(() => _paisSeleccionat = opt!),
-          ),
+          child: DropdownButton(
+            hint: Text(_pais),
+            items: getOpcions(),
+            onChanged: (opcio) {
+              setState(() {
+                _pais = opcio as String;
+              });
+            }),
         ),
       ],
+    );
+  }
+
+  List<DropdownMenuItem<String>> getOpcions() {
+    List<DropdownMenuItem<String>> llista = [];
+    _paisos.forEach((pais) {
+      llista.add(DropdownMenuItem(
+        child: Text(pais),
+        value: (pais)
+        ));
+    });
+    return llista;
+  }
+
+  Widget _crearPersona() {
+    return ListTile(
+      title: Text("Nom, $_nom"),
+      subtitle: Text("Correu: $_email"),
+      trailing: Text(_pais),
     );
   }
 }

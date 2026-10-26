@@ -12,11 +12,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Components',
-      // home: HomePage()
+      // home: HomePage() 
       initialRoute: "/",
       routes: getRoutes(),
       onGenerateRoute: (RouteSettings settings) {
-        print("Hem anat a ${settings.name}");
+        print("Hem anat a ${  settings.name}");
         return MaterialPageRoute(
           builder: (BuildContext context) => AlertScreen());
       },
